@@ -56,10 +56,12 @@ app.get("/api/rooms/city", function (req, res) {
 
   const cityRooms = rooms
     .filter((room) => room.city === city)
-    .sort((a, b) => a.id - b.id);
+    .sort((a, b) => a.room_id - b.room_id);
 
   if (cursor_id) {
-    const cursorIndex = cityRooms.findIndex((room) => room.id === cursor_id);
+    const cursorIndex = cityRooms.findIndex(
+      (room) => room.room_id === cursor_id
+    );
 
     return res.status(200).send({
       result: {
@@ -109,10 +111,12 @@ app.get("/api/rooms/map", function (req, res) {
         room.map_y <= top &&
         room.map_y >= bottom
     )
-    .sort((a, b) => a.id - b.id);
+    .sort((a, b) => a.room_id - b.room_id);
 
   if (cursor_id) {
-    const cursorIndex = mapRooms.findIndex((room) => room.id === cursor_id);
+    const cursorIndex = mapRooms.findIndex(
+      (room) => room.room_id === cursor_id
+    );
 
     return res.status(200).send({
       result: {
