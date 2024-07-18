@@ -59,23 +59,25 @@ app.get("/api/rooms/city", function (req, res) {
     .sort((a, b) => a.room_id - b.room_id);
 
   if (cursor_id) {
-    const cursorIndex = cityRooms.findIndex(
-      (room) => room.room_id === cursor_id
-    );
+    const newIndex =
+      cityRooms.findIndex((room) => room.room_id === parseInt(cursor_id, 10)) +
+      1;
 
     return res.status(200).send({
       result: {
         result_code: 200,
         result_message: "성공",
       },
-      body: {
-        room_response_list: cityRooms.slice(
-          cursorIndex,
-          cursorIndex + 15 < cityRooms.length - 1
-            ? cursorIndex + 15
-            : cityRooms.length - 1
-        ),
-      },
+      body:
+        newIndex + 15 < cityRooms.length - 1
+          ? {
+              room_response_list: cityRooms.slice(newIndex, newIndex + 15),
+              last: false,
+            }
+          : {
+              room_response_list: cityRooms.slice(newIndex),
+              last: true,
+            },
     });
   }
 
@@ -86,6 +88,7 @@ app.get("/api/rooms/city", function (req, res) {
     },
     body: {
       room_response_list: cityRooms.slice(0, 15),
+      last: false,
     },
   });
 });
@@ -114,23 +117,25 @@ app.get("/api/rooms/map", function (req, res) {
     .sort((a, b) => a.room_id - b.room_id);
 
   if (cursor_id) {
-    const cursorIndex = mapRooms.findIndex(
-      (room) => room.room_id === cursor_id
-    );
+    const newIndex =
+      mapRooms.findIndex((room) => room.room_id === parseInt(cursor_id, 10)) +
+      1;
 
     return res.status(200).send({
       result: {
         result_code: 200,
         result_message: "성공",
       },
-      body: {
-        room_response_list: mapRooms.slice(
-          cursorIndex,
-          cursorIndex + 15 < mapRooms.length - 1
-            ? cursorIndex + 15
-            : mapRooms.length - 1
-        ),
-      },
+      body:
+        newIndex + 15 < mapRooms.length - 1
+          ? {
+              room_response_list: mapRooms.slice(newIndex, newIndex + 15),
+              last: false,
+            }
+          : {
+              room_response_list: mapRooms.slice(newIndex),
+              last: true,
+            },
     });
   }
 
@@ -141,6 +146,7 @@ app.get("/api/rooms/map", function (req, res) {
     },
     body: {
       room_response_list: mapRooms.slice(0, 15),
+      last: false,
     },
   });
 });
