@@ -41,7 +41,7 @@ app.get("/api/rooms/randoms", function (req, res) {
   });
 });
 
-api.get("/api/city", function (req, res) {
+app.get("/api/rooms/city", function (req, res) {
   const { city, cursor_id } = req.query;
 
   if (!city) {
