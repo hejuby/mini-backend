@@ -87,3 +87,56 @@ app.get("/api/rooms/city", function (req, res) {
     },
   });
 });
+
+app.get("/api/rooms/map", function (req, res) {
+  const { top, bottom, right, left, cursor_id } = req.query;
+
+  if (!top || !bottom || !right || !left) {
+    return res.status(400).send({
+      result: {
+        result_code: 400,
+        result_message: "실패",
+      },
+      body: null,
+    });
+  }
+
+  const mapRooms = rooms
+    .filter(
+      (room) =>
+        room.map_x <= right &&
+        room.map_x >= left &&
+        room.map_y <= top &&
+        room.map_y >= bottom
+    )
+    .sort((a, b) => a.id - b.id);
+
+  if (cursor_id) {
+    const cursorIndex = mapRooms.findIndex((room) => room.id === cursor_id);
+
+    return res.status(200).send({
+      result: {
+        result_code: 200,
+        result_message: "성공",
+      },
+      body: {
+        room_response_list: mapRooms.slice(
+          cursorIndex,
+          cursorIndex + 15 < mapRooms.length - 1
+            ? cursorIndex + 15
+            : mapRooms.length - 1
+        ),
+      },
+    });
+  }
+
+  return res.status(200).send({
+    result: {
+      result_code: 200,
+      result_message: "성공",
+    },
+    body: {
+      room_response_list: mapRooms.slice(0, 15),
+    },
+  });
+});
